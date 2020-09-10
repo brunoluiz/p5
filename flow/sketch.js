@@ -44,5 +44,5 @@ function draw() {
 }
 
 function keyPressed(value) {
-  if (key === "?") controls.toggle();
+  if (key === "h" || key === "H") controls.toggle();
 }

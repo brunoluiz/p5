@@ -16,12 +16,12 @@ class ParamControls {
   run() {
     if (controls.length) return;
 
-    const controlsHelp = createP("Press '?' to show controls");
+    const controlsHelp = createP("Press 'h' to hide controls");
     controlsHelp.position(0, height - 50);
     controlsHelp.style("width", "100%");
     controlsHelp.style("text-align", "center");
     this.applyFontStyle(controlsHelp);
-    setTimeout(() => controlsHelp.hide(), 10000);
+    setTimeout(() => controlsHelp.hide(), 5000);
 
     this.separationLabel = createP("Separation:");
     this.separationLabel.position(5, 0);
@@ -67,12 +67,21 @@ class ParamControls {
     this.controls.push(this.particleSizeLabel, this.particleSize);
 
     this.resetOnRender = createCheckbox("Reset on render", RESET_ON_RENDER);
-    this.resetOnRender.position(5, height - 90);
+    this.resetOnRender.position(5, height - 120);
     this.applyFontStyle(this.resetOnRender);
     this.resetOnRender.value = () => this.resetOnRender.checked();
     this.controls.push(this.resetOnRender);
 
-    this.toggleRenderButton = createButton("Toggle render");
+    this.hideControlButton = createButton("Hide controls");
+    this.hideControlButton.style(this.fontStyle[0][0], this.fontStyle[0][1]);
+    this.hideControlButton.style("width", "125px");
+    this.hideControlButton.position(7, height - 80);
+    this.hideControlButton.mousePressed(() => {
+      return this.toggle();
+    });
+    this.controls.push(this.hideControlButton);
+
+    this.toggleRenderButton = createButton("Pause/Continue");
     this.toggleRenderButton.style(this.fontStyle[0][0], this.fontStyle[0][1]);
     this.toggleRenderButton.style("width", "125px");
     this.toggleRenderButton.position(7, height - 55);
@@ -98,8 +107,6 @@ class ParamControls {
       background(BACKGROUND_COLOR);
     });
     this.controls.push(this.resetButton);
-
-    this.toggle();
   }
 
   toggle() {
