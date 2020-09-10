@@ -33,7 +33,7 @@ class ParamControls {
     this.maxSpeedLabel = createP("Max speed:");
     this.maxSpeedLabel.position(5, 60);
     this.applyFontStyle(this.maxSpeedLabel);
-    this.maxSpeed = createSlider(0, 4, BOID_MAX_SPEED, 1);
+    this.maxSpeed = createSlider(0, 4, BOID_MAX_SPEED, 0.25);
     this.maxSpeed.position(5, 100);
     this.maxSpeed.changed(() => {
       boids.forEach(v => (v.maxSpeed = this.maxSpeed.value()));
