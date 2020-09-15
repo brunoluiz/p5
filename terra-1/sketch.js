@@ -13,6 +13,7 @@ function setup() {
 
   controls = new ParamControls();
   controls.prepare();
+  controls.toggle();
   controls.regenerateButton.onClick = reset;
 }
 
