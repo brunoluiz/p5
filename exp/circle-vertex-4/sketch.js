@@ -1,7 +1,17 @@
+let fft;
+let mic;
+
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  const cnv = createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
   noiseDetail(2, 1);
+
+  cnv.mousePressed(userStartAudio);
+  mic = new p5.AudioIn();
+  mic.start();
+
+  fft = new p5.FFT();
+  fft.setInput(mic);
 }
 
 let vertexCtr = 0;
@@ -11,7 +21,7 @@ let vertexStep = 0.01;
 let lineStep = 0.01;
 
 function draw() {
-  background('rgba(0, 0, 0, 0.05)');
+  background('rgba(0, 0, 0, 0.075)');
   noStroke();
 
   // move to the center of the canvas (not required on webgl)
@@ -21,7 +31,6 @@ function draw() {
 
   noFill();
   beginShape();
-  let reset = false;
   for (let i = 0; i < 360; i += space) {
     let xoff = map(cos(i), -1, 1, 0, 3);
     let yoff = map(sin(i), -1, 1, 0, 3);
@@ -35,7 +44,7 @@ function draw() {
     let s = map(n2, 0, 1, 20, 40);
     strokeWeight(s);
 
-    let h = map(n1, 0, 1, 200, 300);
+    let h = map(n1, 0, 1, 200, 400);
     let v = p5.Vector.fromAngle(radians(i), h);
     vertex(v.x, v.y);
   }
@@ -44,7 +53,12 @@ function draw() {
   vertexCtr += vertexStep;
   lineCtr += lineStep;
 
-  if (reset) doReset();
+  // vertexStep = map(mic.getLevel(), 0, 1, 0.001, 0.5);
+  let spectrum = fft.analyze();
+  let spectralCentroid = fft.getCentroid();
+  let meanFreq = spectralCentroid / (22050 / spectrum.length);
+  vertexStep = map(meanFreq, 60, spectrum.length, 0.001, 0.075);
+  console.log(meanFreq);
 }
 
 function doReset() {
@@ -52,6 +66,4 @@ function doReset() {
   lineCtr = 0;
 }
 
-function mouseClicked() {
-  vertexStep = random(0.01, 0.05);
-}
+function mouseClicked() {}
